@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-// One-line, letter-by-letter typing effect
+// One-line HERO typing effect
 const useTypingEffect = (text, speed = 120, hold = 1400) => {
   const [typed, setTyped] = useState("");
   useEffect(() => {
@@ -45,7 +45,6 @@ const Navbar = () => {
     { id: "contact", label: "Contact" },
   ];
 
-  // Single line, letter by letter!
   const heroText = useTypingEffect("Software Engineer");
 
   useEffect(() => {
@@ -77,7 +76,7 @@ const Navbar = () => {
 
   return (
     <>
-      {/* HERO TITLE - One Line */}
+      {/* HERO TITLE */}
       <div className="fixed top-2 left-2 z-50 w-[85vw] max-w-[230px] xs:max-w-[270px] sm:max-w-[350px] md:max-w-[400px] pointer-events-none">
         <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.8em]">
           {heroText.split("").map((char, idx) => (
@@ -119,7 +118,7 @@ const Navbar = () => {
         </a>
       </div>
 
-      {/* HAMBURGER, far right on mobile */}
+      {/* HAMBURGER */}
       <div className="fixed top-2 right-2 z-50 md:hidden">
         <button
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
@@ -158,7 +157,7 @@ const Navbar = () => {
         {/* Mobile Menu - all links */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isOpen ? "max-h-[330px]" : "max-h-0"
+            isOpen ? "max-h-[400px]" : "max-h-0"
           }`}
         >
           <ul className="flex flex-col items-center space-y-4 py-4 bg-[#050414] bg-opacity-95 backdrop-blur-lg rounded-lg shadow-lg text-gray-300">
