@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-// Single line, letter by letter professional typing effect
+// One-line, letter-by-letter typing effect
 const useTypingEffect = (text, speed = 120, hold = 1400) => {
   const [typed, setTyped] = useState("");
   useEffect(() => {
@@ -45,7 +45,7 @@ const Navbar = () => {
     { id: "contact", label: "Contact" },
   ];
 
-  // Professional one-line typing effect
+  // Single line, letter by letter!
   const heroText = useTypingEffect("Software Engineer");
 
   useEffect(() => {
