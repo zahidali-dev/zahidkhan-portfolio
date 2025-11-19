@@ -1,0 +1,5 @@
+mkdir .github
+cd .github
+mkdir workflows
+cd workflows
+notepad deploy.yml
