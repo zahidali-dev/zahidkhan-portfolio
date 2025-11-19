@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-// One-line, letter-by-letter typing effect
+// Professional one-line typing
 const useTypingEffect = (text, speed = 120, hold = 1400) => {
   const [typed, setTyped] = useState("");
   useEffect(() => {
@@ -45,7 +45,7 @@ const Navbar = () => {
     { id: "contact", label: "Contact" },
   ];
 
-  // Letter by letter, single line!
+  // Single line, letter by letter!
   const heroText = useTypingEffect("Software Engineer");
 
   useEffect(() => {
@@ -77,8 +77,8 @@ const Navbar = () => {
 
   return (
     <>
-      {/* HERO TITLE - Professional, single line */}
-      <div className="fixed top-2 left-2 z-50 w-[85vw] max-w-[200px] xs:max-w-[250px] sm:max-w-[330px] md:max-w-[370px] pointer-events-none">
+      {/* HERO TITLE - One Line */}
+      <div className="fixed top-2 left-2 z-50 w-[85vw] max-w-[230px] xs:max-w-[270px] sm:max-w-[350px] md:max-w-[400px] pointer-events-none">
         <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.8em]">
           {heroText.split("").map((char, idx) => (
             <span
@@ -97,7 +97,7 @@ const Navbar = () => {
         </h2>
       </div>
 
-      {/* SOCIAL LINKS - right, spaced away from hamburger */}
+      {/* SOCIAL LINKS */}
       <div className="fixed top-2 right-14 z-50 flex gap-2 xs:gap-3 sm:gap-4 md:gap-5">
         <a
           href="https://github.com/zahidali-dev"
@@ -119,7 +119,7 @@ const Navbar = () => {
         </a>
       </div>
 
-      {/* HAMBURGER - far right */}
+      {/* HAMBURGER, far right on mobile */}
       <div className="fixed top-2 right-2 z-50 md:hidden">
         <button
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
