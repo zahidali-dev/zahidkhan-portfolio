@@ -2,56 +2,40 @@ import React, { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-const useDoubleTyping = (text1, text2, speed = 120, hold = 1200) => {
-  const [row1, setRow1] = useState("");
-  const [row2, setRow2] = useState("");
+// One-line, letter-by-letter typing effect
+const useTypingEffect = (text, speed = 120, hold = 1400) => {
+  const [typed, setTyped] = useState("");
   useEffect(() => {
-    let i = 0, j = 0;
-    let step = 0;
+    let i = 0;
     let timer, resetTimer;
-    const run = () => {
-      if (step === 0) {
-        timer = setInterval(() => {
-          setRow1(text1.slice(0, i + 1));
-          i++;
-          if (i > text1.length) {
-            clearInterval(timer);
-            step = 1;
+    const runTyping = () => {
+      timer = setInterval(() => {
+        setTyped(text.slice(0, i + 1));
+        i++;
+        if (i > text.length) {
+          clearInterval(timer);
+          resetTimer = setTimeout(() => {
+            setTyped("");
             i = 0;
-            run();
-          }
-        }, speed);
-      } else if (step === 1) {
-        timer = setInterval(() => {
-          setRow2(text2.slice(0, j + 1));
-          j++;
-          if (j > text2.length) {
-            clearInterval(timer);
-            step = 2;
-            resetTimer = setTimeout(() => {
-              setRow1("");
-              setRow2("");
-              step = 0;
-              j = 0;
-              run();
-            }, hold);
-          }
-        }, speed);
-      }
+            runTyping();
+          }, hold);
+        }
+      }, speed);
     };
-    run();
+    runTyping();
     return () => {
       clearInterval(timer);
       clearTimeout(resetTimer);
     };
-  }, [text1, text2, speed, hold]);
-  return [row1, row2];
+  }, [text, speed, hold]);
+  return typed;
 };
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
+
   const menuItems = [
     { id: "about", label: "About" },
     { id: "skills", label: "Skills" },
@@ -61,8 +45,8 @@ const Navbar = () => {
     { id: "contact", label: "Contact" },
   ];
 
-  // Correct 2-line typing effect!
-  const [typed1, typed2] = useDoubleTyping("Software", "Engineer");
+  // Letter by letter, single line!
+  const heroText = useTypingEffect("Software Engineer");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,19 +77,27 @@ const Navbar = () => {
 
   return (
     <>
-      {/* HERO TITLE - Two Lines, never repeat same word */}
-      <div className="fixed top-2 left-2 z-50 w-[80vw] max-w-[180px] xs:max-w-[230px] sm:max-w-[260px] md:max-w-[310px] pointer-events-none">
-        <div className="flex flex-col space-y-1">
-          <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.5em]">
-            {typed1}<span className="animate-blink">|</span>
-          </h2>
-          <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.5em]">
-            {typed2}<span className="animate-blink">|</span>
-          </h2>
-        </div>
+      {/* HERO TITLE - Professional, single line */}
+      <div className="fixed top-2 left-2 z-50 w-[85vw] max-w-[200px] xs:max-w-[250px] sm:max-w-[330px] md:max-w-[370px] pointer-events-none">
+        <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.8em]">
+          {heroText.split("").map((char, idx) => (
+            <span
+              key={idx}
+              style={{
+                display: "inline-block",
+                animation: `wave 1.2s ease-in-out infinite`,
+                animationDelay: `${idx * 0.05}s`,
+              }}
+              className="transition-transform duration-300 hover:scale-125 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-r hover:from-purple-400 hover:via-pink-500 hover:to-indigo-400"
+            >
+              {char === " " ? "\u00A0" : char}
+            </span>
+          ))}
+          <span className="animate-blink">|</span>
+        </h2>
       </div>
 
-      {/* SOCIAL LINKS - right, spaced from hamburger */}
+      {/* SOCIAL LINKS - right, spaced away from hamburger */}
       <div className="fixed top-2 right-14 z-50 flex gap-2 xs:gap-3 sm:gap-4 md:gap-5">
         <a
           href="https://github.com/zahidali-dev"
@@ -203,4 +195,5 @@ const Navbar = () => {
     </>
   );
 };
+
 export default Navbar;
