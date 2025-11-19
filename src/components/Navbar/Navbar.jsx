@@ -2,62 +2,67 @@ import React, { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
-// Typing effect with two lines
-const useHeroTyping = () => {
-  const line1 = "Software";
-  const line2 = "Engineer";
-  const [row, setRow] = useState(0);        // 0 (Software), 1 (Engineer), 2 (pause)
-  const [text, setText] = useState("");
+const useDoubleTyping = (text1, text2, speed = 120, hold = 1200) => {
+  const [row1, setRow1] = useState("");
+  const [row2, setRow2] = useState("");
   useEffect(() => {
-    let idx = 0;
-    let timer;
-    if (row === 0) {
-      timer = setInterval(() => {
-        setText(line1.slice(0, idx + 1));
-        idx++;
-        if (idx > line1.length) {
-          clearInterval(timer);
-          setTimeout(() => {
-            setRow(1);
-          }, 800);
-        }
-      }, 110);
-    } else if (row === 1) {
-      timer = setInterval(() => {
-        setText(line2.slice(0, idx + 1));
-        idx++;
-        if (idx > line2.length) {
-          clearInterval(timer);
-          setTimeout(() => setRow(2), 1200);
-        }
-      }, 110);
-    } else {
-      setTimeout(() => {
-        setRow(0);
-        setText("");
-      }, 700);
-    }
-    return () => clearInterval(timer);
-  }, [row]);
-  return { row, text, line1, line2 };
+    let i = 0, j = 0;
+    let step = 0;
+    let timer, resetTimer;
+    const run = () => {
+      if (step === 0) {
+        timer = setInterval(() => {
+          setRow1(text1.slice(0, i + 1));
+          i++;
+          if (i > text1.length) {
+            clearInterval(timer);
+            step = 1;
+            i = 0;
+            run();
+          }
+        }, speed);
+      } else if (step === 1) {
+        timer = setInterval(() => {
+          setRow2(text2.slice(0, j + 1));
+          j++;
+          if (j > text2.length) {
+            clearInterval(timer);
+            step = 2;
+            resetTimer = setTimeout(() => {
+              setRow1("");
+              setRow2("");
+              step = 0;
+              j = 0;
+              run();
+            }, hold);
+          }
+        }, speed);
+      }
+    };
+    run();
+    return () => {
+      clearInterval(timer);
+      clearTimeout(resetTimer);
+    };
+  }, [text1, text2, speed, hold]);
+  return [row1, row2];
 };
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
-
   const menuItems = [
     { id: "about", label: "About" },
     { id: "skills", label: "Skills" },
     { id: "experience", label: "Experience" },
     { id: "work", label: "Projects" },
     { id: "education", label: "Education" },
-    { id: "contact", label: "Contact" },  // << Contact is here!
+    { id: "contact", label: "Contact" },
   ];
 
-  // Typing two-line hero
-  const hero = useHeroTyping();
+  // Correct 2-line typing effect!
+  const [typed1, typed2] = useDoubleTyping("Software", "Engineer");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,18 +93,14 @@ const Navbar = () => {
 
   return (
     <>
-      {/* HERO TITLE - Two Lines */}
+      {/* HERO TITLE - Two Lines, never repeat same word */}
       <div className="fixed top-2 left-2 z-50 w-[80vw] max-w-[180px] xs:max-w-[230px] sm:max-w-[260px] md:max-w-[310px] pointer-events-none">
-        <div className="flex flex-col space-y-0.5">
+        <div className="flex flex-col space-y-1">
           <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.5em]">
-            {hero.row === 0 ? hero.text : hero.line1}
-            {hero.row === 2 && hero.line1}
-            <span className="animate-blink">|</span>
+            {typed1}<span className="animate-blink">|</span>
           </h2>
           <h2 className="font-bold text-base xs:text-lg sm:text-xl md:text-2xl text-white cursor-default min-h-[1.5em]">
-            {hero.row === 1 ? hero.text : hero.row === 2 ? hero.line2 : ""}
-            {hero.row === 0 && ""}
-            <span className="animate-blink">|</span>
+            {typed2}<span className="animate-blink">|</span>
           </h2>
         </div>
       </div>
@@ -126,7 +127,7 @@ const Navbar = () => {
         </a>
       </div>
 
-      {/* HAMBURGER - far right, never overlaps links */}
+      {/* HAMBURGER - far right */}
       <div className="fixed top-2 right-2 z-50 md:hidden">
         <button
           aria-label={isOpen ? "Close navigation" : "Open navigation"}
