@@ -68,7 +68,7 @@ const Navbar = () => {
     <>
       {/* Hero left-top */}
       <div className="fixed top-5 left-5 z-50">
-        <h2 className="font-bold text-3xl sm:text-4xl cursor-default flex space-x-1">
+        <h2 className="font-bold text-2xl sm:text-3xl cursor-default flex space-x-1">
           {displayedText.split("").map((char, idx) => (
             <span
               key={idx}
@@ -126,30 +126,37 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isOpen ? "max-h-[500px]" : "max-h-0"
-          }`}
-        >
-          <ul className="flex flex-col items-center space-y-4 py-4 bg-[#050414] bg-opacity-50 backdrop-blur-lg rounded-lg shadow-lg text-gray-300">
+        /* Mobile Menu */}
+          <div className="md:hidden">
+            {/* positioned under the fixed nav, above page content and above social icons when open */}
+            <div
+              className={`absolute left-0 right-0 top-full mt-2 transition-all duration-300 ${
+                isOpen ? "max-h-[60vh] z-[60] opacity-100" : "max-h-0 z-0 opacity-0"
+              } overflow-hidden`}
+              aria-hidden={!isOpen}
+            >
+              <div className="mx-4 bg-[#050414] bg-opacity-85 backdrop-blur-lg rounded-lg shadow-lg overflow-y-auto">
+                <ul className="flex flex-col items-stretch py-3 text-gray-300">
             {menuItems.map((item) => (
               <li
                 key={item.id}
-                className={`cursor-pointer hover:text-[#8245ec] ${
-                  activeSection === item.id ? "text-[#8245ec]" : ""
-                } transition-colors duration-300`}
+                className={`px-4 py-3 text-center border-b border-white/5 last:border-b-0 transition-colors ${
+                  activeSection === item.id ? "text-[#8245ec]" : "hover:text-[#8245ec]"
+                }`}
               >
-                <button onClick={() => handleMenuItemClick(item.id)}>
+                <button
+                  onClick={() => handleMenuItemClick(item.id)}
+                  className="w-full text-sm font-medium"
+                >
                   {item.label}
                 </button>
               </li>
             ))}
-          </ul>
-        </div>
-      </nav>
-
-      {/* GitHub & LinkedIn */}
+                </ul>
+              </div>
+            </div>
+          </div>
+              </nav>}
       <div className="fixed top-5 right-5 flex space-x-4 z-50">
         <a
           href="https://github.com/zahidali-dev"
